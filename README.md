@@ -3,12 +3,15 @@ Welcome To: LeoPhi Basic Example Firmware!!
 
 ##### Note: This is for the LeoPhi Hardware Version 1 Branch
 
-This is the base example sketch for using LeoPhi hardware. (Please note the branches for HWVer1 and 2) It outputs data via USB serial but can easily be modified to use Serial1 as well.
+This is the base example sketch for using LeoPhi hardware. (Please note the branches for HWVer1 and 2) 
+It outputs data via USB serial but can easily be modified to use Serial1 as well.
 
 Reading pH just got a bit easier
 -------------------------
 
-With recent updates to the firmware reading pH has never been easier. Simply plug in LeoPhi via a USB port, point you favorite Serial Port monitor to LeoPhis port and off you go! **LeoPhi even works on openWRT flashed routers for pH readings over Wifi!**
+With recent updates to the firmware reading pH has never been easier. 
+Simply plug in LeoPhi via a USB port, point you favorite Serial Port monitor to LeoPhis port and off you go! 
+**LeoPhi even works on openWRT flashed routers for pH readings over Wifi!**
 
 Please see [LeoPhi's Project page](http://www.sparkyswidgets.com/Projects/LeoPhi.aspx) for more information!
 <http://www.sparkyswidgets.com/Projects/LeoPhi.aspx>
