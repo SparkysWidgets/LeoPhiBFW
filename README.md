@@ -58,3 +58,10 @@ Hardware: Schematics and Layouts
 
 - Take a look in [LeoPhi's Hardware Repo](https://github.com/SparkysWidgets/LeoPhiHW) for the EAGLE files!
 - Check out my I2C pH interface[MinipH](http://www.sparkyswidgets.com/Projects/MinipH.aspx) for a really cost effective PH Probe interface!
+
+License Info
+-------------------------
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width: 0px;" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br />
+<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">LeoPhi</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="www.sparkyswidgets.com" property="cc:attributionName" rel="cc:attributionURL">Ryan Edwards, Sparky's Widgets</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>.<br />
+Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="/projects/LeoPhi.aspx" rel="dct:source">http://www.sparkyswidgets.com/projects/LeoPhi.aspx</a>
