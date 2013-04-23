@@ -19,14 +19,16 @@
  */
 #include <avr/eeprom.h> //we'll use this to write out data structure to eeprom 
 //Our pin definitions
-int PHIN      =      A0;
-int GREENLED  =       6; //on PWM line :note all these led pins sink not source
+int PHIN      =      A8;
+int GREENLED  =      10; //on PWM line :note all these led pins sink not source
 int BLUELED   =      11; //on PWM line
-int REDLED    =      12; //normal digital
+int REDLED    =       9; //normal digital
 
 //LED fade effects
 int brightness =      0;
 int fadeAmount =      5;
+long previousMillis = 0;        // will store last time LED was updated
+long interval = 1000;           // interval at which to blink (milliseconds)
 
 //EEPROM trigger check
 #define Write_Check      0x1234 
@@ -65,7 +67,9 @@ params;
 void setup()  
 {
   pinMode(GREENLED, OUTPUT);
-  setupADC(0,100); //Setup our ISR sampling routine analog pin 0 100hz
+  pinMode(REDLED, OUTPUT);
+  pinMode(BLUELED, OUTPUT);
+  setupADC(PHIN,100); //Setup our ISR sampling routine analog pin 0 100hz
   //Serial1.begin(57600); //Enable basic sesrial commands in base version
   eeprom_read_block(&params, (void *)0, sizeof(params));
   continousFlag = params.continous;
@@ -82,6 +86,7 @@ void loop()
 {
   //Our smoothing portion
   //subtract the last pass
+  unsigned long currentMillis = millis();
   total = total - passes[passIndex];
   //grab our pHRaw this should pretty much always be updated due to our Oversample ISR
   //and place it in our passes array this mimics an analogRead on a pin
@@ -116,18 +121,23 @@ void loop()
 calcpH();
 if(continousFlag)
 {
+  if(currentMillis - previousMillis > interval) {
+    // save the last time you blinked the LED 
+    previousMillis = currentMillis;   
+
  Serial.print("pHRaw: ");
  Serial.print(pHSmooth);
  Serial.print(" | ");
  Serial.print("pH10bit: ");
- Serial.print(analogRead(A0));
+ Serial.print(analogRead(PHIN));
  Serial.print(" | ");
  Serial.print("Milivolts: ");
  Serial.println(miliVolts);
  Serial.print(" | ");
  Serial.print("pH: ");
  Serial.println(pH);
- delay(1000);
+  }
+
 } 
  delay(30);
 }
@@ -249,17 +259,24 @@ void reset_Params(void)
 //everything contained within as fast as possible especially if we intend on using I2C (clock dragging)
 void setupADC(uint8_t channel, int frequency)
 {
+  channel = analogPinToChannel(channel);
+  //uint8_t analog_reference = DEFAULT;
   cli();
   ADMUX = channel | _BV(REFS0);
+  //ADMUX |= (1 << MUX0) | (1 << MUX1) | _BV(REFS0); 
+  ADCSRB = _BV(ADTS3) | _BV(ADTS1) | _BV(MUX5);   // MUX 5 bit part of ADCSRB 
   ADCSRA |= _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0) | _BV(ADATE) | _BV(ADIE);
-  ADCSRB |= _BV(ADTS2) | _BV(ADTS0);  //Compare Match B on counter 1
-  TCCR1A = _BV(COM1B1);
-  TCCR1B = _BV(CS11)| _BV(CS10) | _BV(WGM12);
+  //ADCSRB |= _BV(ADTS3) | _BV(ADTS1);  //Compare Match B on counter 4
+  //TCCR1A = _BV(COM1B1);
+  TCCR4A = _BV(COM4B1);
+  //TCCR1B = _BV(CS11)| _BV(CS10) | _BV(WGM12);
+  TCCR4B = _BV(PWM4X) | _BV(CS41) | _BV(CS40);
+  TCCR4D = _BV(WGM40);
   uint32_t clock = 250000;
   uint16_t counts = clock/(BUFFER_SIZE*frequency);
-  OCR1B = counts;
+  OCR4B = counts;
   
-  TIMSK1 = _BV(OCIE1B);
+  TIMSK4 = _BV(OCIE4B);
   ADCSRA |= _BV(ADEN) | _BV(ADSC);
   sei();
 }
@@ -281,8 +298,8 @@ ISR(ADC_vect)
     pHRaw = sum;
   }
   sum=0;
-  TCNT1=0;
+  TCNT4=0;
 }
-ISR(TIMER1_COMPB_vect)
+ISR(TIMER4_COMPB_vect)
 {
 }
