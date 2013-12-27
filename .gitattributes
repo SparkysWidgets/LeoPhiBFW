@@ -1,6 +1,6 @@
 #LeoPhi Basic Firmware .gitattributes file used mainly to keep line ending consistant between platforms
 # Set default behaviour, in case users don't have core.autocrlf set.
-* text=false
+* text=Auto
 
 # Explicitly declare text files we want to always be normalized and converted 
 # to native line endings on checkout.
@@ -8,7 +8,7 @@
 #*.h text
 
 # Declare files that will always have CRLF line endings on checkout.
-#*.sln text eol=crlf
+*.ino text eol=lf
 
 # Denote all files that are truly binary and should not be modified.
 #*.png binary
